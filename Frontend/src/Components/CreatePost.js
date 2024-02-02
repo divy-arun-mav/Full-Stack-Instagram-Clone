@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./ComponentsCSS/CreatePost.css";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
@@ -51,8 +50,8 @@ export default function Createpost() {
         const data = new FormData()
         data.append("file", image)
         data.append("upload_preset", "insta-clone")
-        data.append("cloud_name", "divine")
-        fetch("https://api.cloudinary.com/v1_1/divine/image/upload", {
+        data.append("cloud_name", "djy7my1mw")
+        fetch("https://api.cloudinary.com/v1_1/djy7my1mw/image/upload", {
             method: "post",
             body: data
         }).then(res => res.json())
@@ -74,15 +73,8 @@ export default function Createpost() {
         <div className="createPost">
             {/* //header */}
             <div className="post-header">
-                <h4>Create New Post</h4>
-                <button id="post-btn" style={{
-                    margin: "none !important",
-                    border: "none !important",
-                    color: "#339ce3!important",
-                    background: "none !important",
-                    fontWeight: "bolder !important",
-                    cursor: "pointer !important",
-                }} onClick={() => { postDetails() }}>Share</button>
+                <h4 style={{ margin: "3px auto" }}>Create New Post</h4>
+                <button id="post-btn" onClick={() => { postDetails() }}>Share</button>
             </div>
             {/* image preview */}
             <div className="main-div">
@@ -114,6 +106,55 @@ export default function Createpost() {
                     setBody(e.target.value)
                 }} type="text" placeholder="Write a caption...."></textarea>
             </div>
+            <style>
+                {`
+                .createPost {
+    max-width: 500px;
+    margin: 10px auto;
+    border: 1px solid rgb(173, 173, 173);
+    border-radius: 5px;
+}
+
+.main-div {
+    border-top: 1px solid rgb(173, 173, 173);
+}
+
+.post-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#post-btn {
+    
+}
+
+.details {
+    border-top: 1px solid rgb(173, 173, 173);
+}
+
+textarea {
+    width: 90%;
+    border: none;
+    outline: none;
+}
+
+#output {
+    width: 300px;
+    border: none;
+    outline: none;
+    margin-top: 5px;
+}
+
+.card-pic img {
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+                `}
+            </style>
         </div>
     );
 }

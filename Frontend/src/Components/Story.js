@@ -69,6 +69,34 @@ const Story = () => {
       <MyStory />
       <MyStory />
       <MyStory />
+      <style>
+        {`
+        *{
+    padding: none;
+    border: none;
+}
+
+body{
+    width: 50%;
+    height: 100px;
+    overflow-x: hidden;
+}
+
+.react-multiple-carousel__arrow{
+    top: 8px;
+    right: 10px;
+    width: 10px;
+}
+
+.react-multiple-carousel__arrow--left{
+    left: 0px;
+}
+
+.react-multi-carousel-list{
+    width: 83%;
+}
+        `}
+      </style>
     </Carousel>
   )
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Aarav from "../Images/aarav.jpg";
-import './ComponentsCSS/Profile.css'
 
 const Profile = () => {
     return (
@@ -39,6 +38,49 @@ const Profile = () => {
                     Following
                 </button>
             </div>
+            <style>
+                {`
+                .profile{
+    width: fit-content;
+    position: absolute;
+    top: 40px;
+    left: 150px;
+    background-color: rgba(255, 255, 255, 1);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px rgb(0, 0, 0);
+}
+
+.about_user{
+    display: flex;
+}
+
+.accountname{
+    display: block;
+}
+
+.accountname h2{
+    font-size: 15px;
+}
+
+.abt_person{
+    display: flex;
+}
+
+.data-person{
+    flex-direction: row;
+}
+
+.message , .following {
+    position: relative;
+    top: 0;  
+}
+
+.message:hover{
+    background-color: blue;
+}
+                `}
+            </style>
         </>
     )
 }

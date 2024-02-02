@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './ComponentsCSS/MainContent.css'
 import Story from './Story'
 import Posts from './Posts'
 
@@ -13,6 +12,14 @@ const MainContent = () => {
       <Posts />
       <Posts />
       <Posts />
+      <style>
+        {`
+        body{
+    margin: 40px 0px 0px 380px;
+    padding: 0px 10px;
+}
+        `}
+      </style>
     </div>
   )
 }

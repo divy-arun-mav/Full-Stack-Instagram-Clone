@@ -4,43 +4,43 @@ import { useNavigate } from "react-router-dom";
 import googlePlayImage from "../Images/Loginpageimgs/Getitgoogleplayicon.png";
 import microsoftImage from "../Images/Loginpageimgs/Getitonmicrosofticon.png";
 import instaLogo from "../Images/Loginpageimgs/instalockicon1.png";
+import { useAuth } from '../store/auth';
 
 const Signin = () => {
-
   const navigate = useNavigate();
+  const [username, setUserName] = useState("")
+  const [password, setPassword] = useState("")
 
-  const notifyA = (msg) => toast.error(msg);
-  const notifyB = (msg) => toast.success(msg);
+  // Toast functions
+  const notifyA = (msg) => toast.error(msg)
+  const notifyB = (msg) => toast.success(msg)
 
-  const postData = async () => {
+  const postData = () => {
+    // Sending data to server
+    fetch("http://localhost:5000/signin", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username,
+        password
 
-    try {
-      fetch("http://localhost:5000/signin", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password
-        })
-      }).then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            notifyA(data.error);
-          } else {
-            notifyB(data.message);
-            navigate('/')
-          }
+      })
+    }).then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          notifyA(data.error)
+        } else {
+          notifyB("Signed In Successfully")
           console.log(data)
-        })
-    } catch (error) {
-      console.log(error);
-    }
+          localStorage.setItem("jwt", data.token)
+          localStorage.setItem("user", JSON.stringify(data.user))
+          navigate("/")
+        }
+        console.log(data)
+      })
   }
-
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
 
   return (
     <div>

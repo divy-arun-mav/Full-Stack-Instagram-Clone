@@ -13,10 +13,6 @@ router.get('/', (req, res) => {
     res.send("Hello World");
 });
 
-router.get('/createPost', requireLogin , (req, res) => {
-    console.log("hello auth")
-})
-
 router.post('/signup', (req, res) => {
     const { name, username, email, password } = req.body;
 
@@ -57,7 +53,7 @@ router.post('/signup', (req, res) => {
 });
 
 router.post("/signin", (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
 
     if (!username || !password) {
         return res.status(422).json({ error: "Please provide a valid username and password" });
@@ -70,9 +66,9 @@ router.post("/signin", (req, res) => {
         
         bcrypt.compare(password, savedUser.password).then((isMatch) => {
             if (isMatch) {
-                res.json({ message: "Login successful" });
                 const token = jwt.sign({ _id: savedUser.id }, Jwt_secret);
                 console.log(token);
+                res.json({ message: "Login successful", token });
             } else {
                 res.status(422).json({ error: "Invalid username or password" });
             }
@@ -85,6 +81,18 @@ router.post("/signin", (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     });
 });
+
+router.get("/user", (req, res) => {
+    try {
+        const userData = req.User;
+        console.log(userData);
+        res.status(200).json({ msg: userData })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 
 module.exports = router;
