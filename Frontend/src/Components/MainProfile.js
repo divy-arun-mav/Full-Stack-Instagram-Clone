@@ -1,0 +1,11 @@
+import React from 'react'
+
+const MainProfile = () => {
+    return (
+        <>
+            <h1>Your Profile</h1>
+        </>
+    )
+}
+
+export default MainProfile

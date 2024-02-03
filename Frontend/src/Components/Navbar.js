@@ -20,20 +20,27 @@ const Navbar = () => {
       <img src={Logo} alt="logo" />
       </div>
       <ul className='nav-list'>
-        <Link><li className='Home'><img src={Homeicon}/>Home</li></Link>
-        <Link><li className='Search'><img src={Searchicon} />Search</li></Link>
-        <Link><li className='Explore'><img src={Exploreicon} />Explore</li></Link>
-        <Link><li className='Reels'><img src={Reelsicon} />Reels</li></Link>
-        <Link><li className='Messages'><img src={Messagesicon} />Messages</li></Link>
-        <Link><li className='Notifications'><img src={Notificationsicon} />Notifications</li></Link>
-        <Link><li className='Create'><img src={Createicon} />Create</li></Link>
-        <Link><li className='Profile'><img src={Profilephoto} />Profile</li></Link>
-        <Link><li className='More'><img src={Hamburger} />More</li></Link>
+              <Link className='link' to="/"><li className='Home'><img src={Homeicon} /><span>Home</span></li></Link>
+              <Link className='link' to="/search"><li className='Search'><img src={Searchicon} /><span>Search</span></li></Link>
+              <Link className='link' to="/explore"><li className='Explore'><img src={Exploreicon} /><span>Explore</span></li></Link>
+              <Link className='link' to="/reels"><li className='Reels'><img src={Reelsicon} /><span>Reels</span></li></Link>
+              <Link className='link' to="/message"><li className='Messages'><img src={Messagesicon} /><span>Messages</span></li></Link>
+              <Link className='link' to="/notifications"><li className='Notifications'><img src={Notificationsicon} /><span>Notifications</span></li></Link>
+              <Link className='link' to="/createpost"><li className='Create'><img src={Createicon} /><span>Create</span></li></Link>
+              <Link className='link' to="/my-profile"><li className='Profile'><img src={Profilephoto} /><span>Profile</span></li></Link>
+              <li className='More'><img src={Hamburger} />More</li>
       </ul>
       </nav>
         </div>
+        <span className='logout'>
+          <Link to="/logout">Signout</Link>
+        </span>
         <style>
           {`
+          .link{
+            text-decoration: none;
+            color:black;
+          }
             *{
     margin: 0;
     padding: 0;

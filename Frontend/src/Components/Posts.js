@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { useState } from 'react';
-import './ComponentsCSS/Posts.css';
 import Profile from "./Profile";
 import Aarav from "../Images/aarav.jpg";
 import AaravPost from "../Images/instagrampostaarav.png";

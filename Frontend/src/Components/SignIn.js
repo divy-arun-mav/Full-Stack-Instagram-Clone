@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import googlePlayImage from "../Images/Loginpageimgs/Getitgoogleplayicon.png";
 import microsoftImage from "../Images/Loginpageimgs/Getitonmicrosofticon.png";
 import instaLogo from "../Images/Loginpageimgs/instalockicon1.png";
-import { useAuth } from '../store/auth';
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -44,63 +43,6 @@ const Signin = () => {
 
   return (
     <div>
-      {/* <div style={{ border: "1px solid #ccc" }}>
-        <div className="container">
-          <h1>Sign In</h1>
-          <p>Please fill in this form to create an account.</p>
-          <hr />
-          <label htmlFor="name">
-            <b>Name</b>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter Name"
-            name="name"
-            required=""
-            onChange={(e) => { setName(e.target.value) }}
-            value={name}
-          />
-          <label htmlFor="username">
-            <b>Username</b>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter UserName"
-            name="username"
-            required=""
-            onChange={(e) => { setUserName(e.target.value) }}
-            value={username}
-          />
-          <label htmlFor="email">
-            <b>Email</b>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter Email"
-            name="email"
-            required=""
-            onChange={(e) => { setEmail(e.target.value) }}
-            value={email}
-          />
-          <label htmlFor="password">
-            <b>Password</b>
-          </label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            name="password"
-            required=""
-            onChange={(e) => { setPassword(e.target.value) }}
-            value={password}
-          />
-          <div className="clearfix">
-            <button type="submit" className="signupbtn" onClick={() => { postData() }}>
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </div> */}
-
       <div id="container">
         <section>
           <div className="main-top">
@@ -222,6 +164,7 @@ const Signin = () => {
             text-align: center;
         }
         .logo img {
+          width: 50%;
             height: auto;
         }
 

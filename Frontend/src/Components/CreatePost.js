@@ -108,50 +108,48 @@ export default function Createpost() {
             </div>
             <style>
                 {`
-                .createPost {
+                .card-pic img{
+                    width: 50px;
+                    height: 50px;
+                    border-radius:50%;
+                }
+                .createPost{
     max-width: 500px;
     margin: 10px auto;
     border: 1px solid rgb(173, 173, 173);
     border-radius: 5px;
 }
 
-.main-div {
-    border-top: 1px solid rgb(173, 173, 173);
+.main-div{
+    border-top: 1px solid rgb(173, 173, 173) ;
 }
-
-.post-header {
+.post-header{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
 }
 
-#post-btn {
-    
+#post-btn{
+    border: none;
+    color: #339ce3;
+    background:none;
+    font-weight: bolder;
+    cursor: pointer;
 }
 
-.details {
-    border-top: 1px solid rgb(173, 173, 173);
+.details{
+    border-top: 1px solid rgb(173, 173, 173) ;
 }
 
-textarea {
+textarea{
     width: 90%;
     border: none;
     outline: none;
 }
 
-#output {
+#output{
     width: 300px;
     border: none;
     outline: none;
     margin-top: 5px;
-}
-
-.card-pic img {
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
 }
                 `}
             </style>

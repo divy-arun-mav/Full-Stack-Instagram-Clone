@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './ComponentsCSS/Story.css';
 import Friends from "../Images/friends.jpg";
 
 const MyStory = () => {

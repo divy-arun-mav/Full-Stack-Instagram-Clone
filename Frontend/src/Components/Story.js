@@ -2,7 +2,6 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import React, { Component } from 'react'
 import MyStory from "./MyStory";
-import "./ComponentsCSS/MainStory.css";
 
 const Story = () => {
   const responsive = {
