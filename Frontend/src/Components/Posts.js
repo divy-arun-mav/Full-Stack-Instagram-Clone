@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { useState } from 'react';
 import Profile from "./Profile";
 import Aarav from "../Images/aarav.jpg";
@@ -9,9 +9,45 @@ import Share from "../Images/shareicon.png";
 import Save from "../Images/saveicon.png";
 import Emoji from "../Images/emoji-icon.jpg";
 import Bluetick from "../Images/bluetick.png";
-import Sideburger from "../Images/Sideburger.png"
+import Sideburger from "../Images/Sideburger.png";
+import { toast } from 'react-toastify';
 
 const Posts = ({ text, maxLength }) => {
+
+    // Use state to manage the result and loading states
+    const [result, setResult] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    // Toast functions
+    const notifyA = (msg) => toast.error(msg);
+    const notifyB = (msg) => toast.success(msg);
+
+    const getPosts = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/posts", {
+                method: "get"
+            });
+            const data = await response.json();
+
+            if (data.error) {
+                notifyA(data.error);
+            } else {
+                setResult(data);
+                console.log(data);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            notifyA("Error fetching data");
+        } finally {
+            // Set loading to false after fetching data
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getPosts();
+    }, []);
+
 
   let account_name = 'reelmaster_aarav_bhanushali';
 
@@ -23,43 +59,53 @@ const Posts = ({ text, maxLength }) => {
     setIsExpanded(!isExpanded);
   };
   return (
-    <main>
-      <div className='Posts'>
-        <heading>
-          <img src={Aarav} />
-          <div className='text'>
-            <div className='firsttext'>
-              <p className='acc_name' href="#profile" style={{ fontWeight: 640, fontSize: 13 + 'px' }}>{account_name}</p>
-              <img id='verified' className='bluetick' src={Bluetick} />
-              <li>{time_upload}</li>
-            </div>
-            <div className='secondtext'>
-              <p value='audio'>maxxmani_7</p>
-              <li id='audio_type'>Orginal Audio</li>
-            </div>
-            <div className='sideburger'>
-              <img src={Sideburger} />
-            </div>
-          </div>
-        </heading>
-        <div className='post'>
-          <img src={AaravPost} />
-        </div>
-        <ul className="extraicons">
-          <li className='extra iconone'><img src={Like} /></li>
-          <li className='extra icontwo'><img src={Comment} /></li>
-          <li className='extra iconthree'><img src={Share} /></li>
-          <li className='extra iconfour'><img src={Save} /></li>
-        </ul>
-        <p className='likedby'>Liked by <b style={{ fontWeight: 640 }}>harshitamav</b> and <b style={{ fontWeight: 640 }}>12 others</b></p>
-        <p className='description'><b className='hashtags'>#Lorem#Ipsum</b> is <b className='hashtags' id='hashtags'>#simply</b> dummy text of the printing  </p>
-        <p id='show' onClick={toggleExpanded}>
-          {isExpanded ? "and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." : 'more'}
-        </p>
-        <input className='commenthere' type='text' placeholder='Add a comment...'/>
-        <img className='emoji' src={Emoji} />
-      </div>
-      {/* <div className='profile'><Profile /></div> */}
+      <main>
+          {loading ? (
+              <div>Loading...</div>
+          ) : (
+              <div>
+                  {result.map((post) => (
+                      <div key={post._id}>
+                          <div className='Posts'>
+                              <heading>
+                                  <img src={Aarav} />
+                                  <div className='text'>
+                                      <div className='firsttext'>
+                                          <p className='acc_name' href="#profile" style={{ fontWeight: 640, fontSize: 13 + 'px' }}>{post.postedBy.username}<span className='profile'><Profile /></span></p>
+
+                                          <img id='verified' className='bluetick' src={Bluetick} />
+                                          <li>{time_upload}</li>
+                                      </div>
+                                      <div className='secondtext'>
+                                          <p value='audio'>maxxmani_7</p>
+                                          <li id='audio_type'>Orginal Audio</li>
+                                      </div>
+                                      <div className='sideburger'>
+                                          <img src={Sideburger} />
+                                      </div>
+                                  </div>
+                              </heading>
+                              <div className='post'>
+                                  <img src={post.photo} />
+                              </div>
+                              <ul className="extraicons">
+                                  <li className='extra iconone'><img src={Like} /></li>
+                                  <li className='extra icontwo'><img src={Comment} /></li>
+                                  <li className='extra iconthree'><img src={Share} /></li>
+                                  <li className='extra iconfour'><img src={Save} /></li>
+                              </ul>
+                              <p className='likedby'>Liked by <b style={{ fontWeight: 640 }}>harshitamav</b> and <b style={{ fontWeight: 640 }}>12 others</b></p>
+                              <p className='description'>{post.body}</p>
+                              <p id='show' onClick={toggleExpanded}>
+                                  {isExpanded ? "and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." : 'more'}
+                              </p>
+                              <input className='commenthere' type='text' placeholder='Add a comment...' />
+                              <img className='emoji' src={Emoji} />
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          )}
       <style>
         {`
         main {
@@ -146,7 +192,7 @@ heading img {
 }
 
 .acc_name:hover .profile{
-    display: none;
+    display: block;
 }
 
 .extraicons {
@@ -173,9 +219,8 @@ heading img {
     left: 234px;
 }
 
-.firsttext:hover~.profile,
-.firsttext:focus~.profile {
-    display: none;
+.profile{
+    display:none;
 }
 
 .bluetick {

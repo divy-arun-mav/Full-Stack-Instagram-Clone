@@ -28,13 +28,13 @@ const Navbar = () => {
               <Link className='link' to="/notifications"><li className='Notifications'><img src={Notificationsicon} /><span>Notifications</span></li></Link>
               <Link className='link' to="/createpost"><li className='Create'><img src={Createicon} /><span>Create</span></li></Link>
               <Link className='link' to="/my-profile"><li className='Profile'><img src={Profilephoto} /><span>Profile</span></li></Link>
-              <li className='More'><img src={Hamburger} />More</li>
-      </ul>
-      </nav>
+              <li className='more'><img src={Hamburger} /><span>More</span></li>
+              <span className='logout'>
+                <Link to="/logout">Signout</Link>
+              </span>
+            </ul>
+          </nav>
         </div>
-        <span className='logout'>
-          <Link to="/logout">Signout</Link>
-        </span>
         <style>
           {`
           .link{
@@ -44,6 +44,28 @@ const Navbar = () => {
             *{
     margin: 0;
     padding: 0;
+}
+
+.logout{
+  display:none;
+  position:relative;
+  top:160px;
+  background-color:rgba(213,213,213,0.4);
+  padding: 20px;
+  border-radius:15px;
+  text-align:center;
+  transition: all 1s;
+}
+
+a{
+  text-decoration:none;
+  color:black;
+}
+.more:hover ~.logout{
+  display:block;
+}
+.logout:hover {
+  display:block;
 }
 
 body{
@@ -74,7 +96,7 @@ nav{
     font-size: 15px;
 }
 
-.Home img , .Search img , .Explore img , .Reels img , .Messages img , .Notifications img , .Create img , .Profile img , .More img{
+.Home img , .Search img , .Explore img , .Reels img , .Messages img , .Notifications img , .Create img , .Profile img , .more img{
     width: 20px;
     margin: 0px 10px 0px 18px;
 }
@@ -85,7 +107,7 @@ nav{
     cursor: pointer;
 }
 
-.Search , .Explore , .Reels , .Messages , .Notifications , .Create , .Profile , .More{
+.Search , .Explore , .Reels , .Messages , .Notifications , .Create , .Profile , .more{
     color: rgb(42, 42, 42);
     font-weight: 0;
     display: flex;
@@ -96,7 +118,7 @@ nav{
     font-size: 15px;
 }
 
-.More{
+.more{
     display: flex;
     align-items: center;
     position: fixed;
@@ -114,7 +136,7 @@ nav{
 }
 
 .logo img{
-    width: 110px;
+    width: 8vw;
 }
 
 .profile{
@@ -155,6 +177,11 @@ nav{
 
 ul li:hover {
     background-color: rgba(61, 61, 61, 0);
+}
+@media screen and (max-width:1100px){
+  .nav-list a li span ,.more span{
+    display:none;
+  }
 }
           `}
         </style>

@@ -7,11 +7,6 @@ const MainContent = () => {
     <div>
       <Story />
       <Posts />
-      <Posts />
-      <Posts />
-      <Posts />
-      <Posts />
-      <Posts />
       <style>
         {`
         body{
