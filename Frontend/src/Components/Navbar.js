@@ -139,10 +139,6 @@ nav{
     width: 8vw;
 }
 
-.profile{
-    border: 2px solid red;
-}
-
 .profile_photo{
     width: 60px;
     border-radius: 50%;

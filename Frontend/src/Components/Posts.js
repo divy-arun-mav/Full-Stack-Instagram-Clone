@@ -39,7 +39,6 @@ const Posts = ({ text, maxLength }) => {
             console.error("Error fetching data:", error);
             notifyA("Error fetching data");
         } finally {
-            // Set loading to false after fetching data
             setLoading(false);
         }
     }

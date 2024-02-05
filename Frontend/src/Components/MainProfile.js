@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Navbar from './Navbar';
+import Profilephoto from "../Images/profile.jpg";
 
 const MainProfile = () => {
     // Use state to manage the result and loading states
     const [result, setResult] = useState({});
+    const [postres, setPostres] = useState([]);
     const [loading, setLoading] = useState(true);
 
     // Toast functions
@@ -25,7 +28,6 @@ const MainProfile = () => {
                 notifyA(data.error);
             } else {
                 setResult(data);
-                console.log(result);
             }
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -36,22 +38,114 @@ const MainProfile = () => {
         }
     }
 
+    const getMyPosts = async () => {
+        try {
+            const mypostsResponse = await fetch("http://localhost:5000/myposts", {
+                method: "get",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("jwt")
+                }
+            });
+            const post = await mypostsResponse.json();
+
+            if (post.error) {
+                notifyA(post.error);
+            } else {
+                setPostres(post);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     useEffect(() => {
         getData();
+        getMyPosts();
     }, []);
 
     return (
         <>
-            {loading ? (
-                <div>Loading...</div>
-            ) : (
-                <>
-                    Name: {result.msg.name}<br />
-                    Username: {result.msg.username}<br />
-                    email: {result.msg.email}<br />
-                    <button onClick={getData}>Show</button>
-                </>
-            )}
+            <Navbar />
+            <div className='profile'>
+                {loading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <div className='prof-cont'>
+                        <div className='insider'>
+                            <img className='profile-img' src={Profilephoto} />
+                            <div className='details'>
+                                <h2>Name: {result.msg.name}</h2><br />
+                                <h2>Username: {result.msg.username}</h2><br />
+                                <h2>email: {result.msg.email}</h2><br />
+                            </div>
+                        </div>
+                        <h1>Your Posts</h1>
+                        <div className='photo-container'>
+                            {postres.map((post) => (
+                                <img className='photo' key={post._id} src={post.photo} />
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+            <style>
+                {`
+                body{
+                    margin:0;
+                    padding:0;
+                    width:100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction:column;
+                    text-align:center;
+                }
+                .profile-img{
+                    border-radius:50%;
+                }
+
+                .profile{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width:100%;
+                    text-align:center;
+                }
+                .insider{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .details{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction:column;
+                }
+                .prof-cont{
+                    ddisplay: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction:column;
+                    text-align:center;
+                    width:50%;
+                }
+                .photo-container{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-wrap:wrap;
+                }
+                .photo{
+                    width: 30%;
+    aspect-ratio: 3/4;
+    object-fit: contain;
+    mix-blend-mode: multiply !important;
+                }
+                `}
+            </style>
         </>
     )
 }
