@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema.Types;
+const mongoose = require("mongoose")
+const { ObjectId } = mongoose.Schema.Types
 
 const postSchema = new mongoose.Schema({
     body: {
@@ -8,13 +8,17 @@ const postSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        required: true
+        require: true
     },
+    likes: [{ type: ObjectId, ref: "USER" }],
+    comments: [{
+        comment: { type: String },
+        postedBy: { type: ObjectId, ref: "USER" }
+    }],
     postedBy: {
         type: ObjectId,
         ref: "USER"
     }
-});
+}, { timestamps: true })
 
-mongoose.model("POST", postSchema);
-module.exports = postSchema;
+mongoose.model("POST", postSchema)

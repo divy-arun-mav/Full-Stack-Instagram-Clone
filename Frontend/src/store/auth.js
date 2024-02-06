@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
     const userAuthentication = async () => {
         try {
-            const response = await fetch("http://localhost:8000/user", {
+            const response = await fetch("http://localhost:5000/user", {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,

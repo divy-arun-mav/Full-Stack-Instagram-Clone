@@ -1,9 +1,6 @@
-import React, { Component, useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Profile from "./Profile";
 import Aarav from "../Images/aarav.jpg";
-import AaravPost from "../Images/instagrampostaarav.png";
-import Like from "../Images/heart.png";
 import Comment from "../Images/comment_icon.png";
 import Share from "../Images/shareicon.png";
 import Save from "../Images/saveicon.png";
@@ -11,102 +8,187 @@ import Emoji from "../Images/emoji-icon.jpg";
 import Bluetick from "../Images/bluetick.png";
 import Sideburger from "../Images/Sideburger.png";
 import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Posts = ({ text, maxLength }) => {
+    const navigate = useNavigate();
 
-    // Use state to manage the result and loading states
-    const [result, setResult] = useState({});
+    const [result, setResult] = useState([]);
+    const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(true);
 
-    // Toast functions
     const notifyA = (msg) => toast.error(msg);
     const notifyB = (msg) => toast.success(msg);
 
-    const getPosts = async () => {
-        try {
-            const response = await fetch("http://localhost:5000/posts", {
-                method: "get"
-            });
-            const data = await response.json();
-
-            if (data.error) {
-                notifyA(data.error);
-            } else {
-                setResult(data);
-                console.log(data);
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            notifyA("Error fetching data");
-        } finally {
-            setLoading(false);
-        }
-    }
-
     useEffect(() => {
-        getPosts();
-    }, []);
+        const token = localStorage.getItem("jwt");
+        if (!token) {
+            navigate("./signup");
+        }
+
+        // Fetching all posts
+        fetch("http://localhost:5000/allposts", {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+                setResult(result);
+                setLoading(false); // Set loading to false when data is fetched
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false); // Set loading to false in case of an error
+            });
+    }, [navigate]);
+
+    const unlikePost = (id) => {
+        fetch("http://localhost:5000/unlike", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId: id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                const newData = result.map((posts) => {
+                    if (posts._id === result._id) {
+                        return result;
+                    } else {
+                        return posts;
+                    }
+                });
+                setResult(newData);
+                console.log(result);
+            })
+            .catch((err) => console.log(err));
+    };
+
+    // Function to make a comment
+    const makeComment = (text, id) => {
+        fetch("http://localhost:5000/comment", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                text: text,
+                postId: id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                const newData = result.map((posts) => {
+                    if (posts._id === result._id) {
+                        return result;
+                    } else {
+                        return posts;
+                    }
+                });
+                setResult(newData);
+                setComment(""); // Clear comment state
+                notifyB("Comment posted");
+                console.log(result);
+            })
+            .catch((err) => console.log(err));
+    };
+
+    const likePost = (id) => {
+        fetch("http://localhost:5000/like", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId: id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                const newData = result.map((posts) => {
+                    if (posts._id === result._id) {
+                        return result;
+                    } else {
+                        return posts;
+                    }
+                });
+                setResult(newData);
+                console.log(result);
+            })
+            .catch((err) => console.log(err));
+    };
+
+    let account_name = 'reelmaster_aarav_bhanushali';
+    let time_upload = '2h';
+
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const toggleExpanded = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    return (
+        <main>
+            {loading ? (
+                <div>Loading...</div>
+            ) : (
+                <div>
+                    {result.map((post) => (
+                        <div key={post._id}>
+                            <div className='Posts'>
+                                <heading>
+                                    <img src={Aarav} />
+                                    <div className='text'>
+                                        <div className='firsttext'>
+                                            <Link className='acc_name' to="" style={{ fontWeight: 640, fontSize: 13 + 'px' }}>
+                                                {post.postedBy.username}
+                                                <span className='profile'><Profile /></span>
+                                            </Link>
 
 
-  let account_name = 'reelmaster_aarav_bhanushali';
-
-  let time_upload = '2h';
-  
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-  return (
-      <main>
-          {loading ? (
-              <div>Loading...</div>
-          ) : (
-              <div>
-                  {result.map((post) => (
-                      <div key={post._id}>
-                          <div className='Posts'>
-                              <heading>
-                                  <img src={Aarav} />
-                                  <div className='text'>
-                                      <div className='firsttext'>
-                                          <p className='acc_name' href="#profile" style={{ fontWeight: 640, fontSize: 13 + 'px' }}>{post.postedBy.username}<span className='profile'><Profile /></span></p>
-
-                                          <img id='verified' className='bluetick' src={Bluetick} />
-                                          <li>{time_upload}</li>
-                                      </div>
-                                      <div className='secondtext'>
-                                          <p value='audio'>maxxmani_7</p>
-                                          <li id='audio_type'>Orginal Audio</li>
-                                      </div>
-                                      <div className='sideburger'>
-                                          <img src={Sideburger} />
-                                      </div>
-                                  </div>
-                              </heading>
-                              <div className='post'>
-                                  <img src={post.photo} />
-                              </div>
-                              <ul className="extraicons">
-                                  <li className='extra iconone'><img src={Like} /></li>
-                                  <li className='extra icontwo'><img src={Comment} /></li>
-                                  <li className='extra iconthree'><img src={Share} /></li>
-                                  <li className='extra iconfour'><img src={Save} /></li>
-                              </ul>
-                              <p className='likedby'>Liked by <b style={{ fontWeight: 640 }}>harshitamav</b> and <b style={{ fontWeight: 640 }}>12 others</b></p>
-                              <p className='description'>{post.body}</p>
-                              <p id='show' onClick={toggleExpanded}>
-                                  {isExpanded ? "and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." : 'more'}
-                              </p>
-                              <input className='commenthere' type='text' placeholder='Add a comment...' />
-                              <img className='emoji' src={Emoji} />
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          )}
-      <style>
-        {`
+                                            <img id='verified' className='bluetick' src={Bluetick} />
+                                            <li>{time_upload}</li>
+                                        </div>
+                                        <div className='secondtext'>
+                                            <p value='audio'>maxxmani_7</p>
+                                            <li id='audio_type'>Orginal Audio</li>
+                                        </div>
+                                        <div className='sideburger'>
+                                            <img src={Sideburger} />
+                                        </div>
+                                    </div>
+                                </heading>
+                                <div className='post'>
+                                    <img src={post.photo} />
+                                </div>
+                                <ul className="extraicons">
+                                    <li className='extra iconone'><span class="material-symbols-outlined" style={{ fontSize: "30px" }} onClick={() => { likePost(post._id) }}>favorite</span></li>
+                                    <li className='extra icontwo'><img src={Comment} /></li>
+                                    <li className='extra iconthree'><img src={Share} /></li>
+                                    <li className='extra iconfour'><img src={Save} /></li>
+                                </ul>
+                                <p className='likedby'>Liked by <b style={{ fontWeight: 640 }}>harshitamav</b> and <b style={{ fontWeight: 640 }}>12 others</b></p>
+                                <p className='description'>{post.body}</p>
+                                <p id='show' onClick={toggleExpanded}>
+                                    {isExpanded ? "and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." : 'more'}
+                                </p>
+                                <input className='commenthere' type='text' placeholder='Add a comment...' />
+                                <img className='emoji' src={Emoji} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+            <style>
+                {`
         main {
     position: relative;
     right: 0px;
@@ -146,6 +228,16 @@ heading img {
     height: 20px;
 }
 
+.material-symbols-outlined {
+    font-size:30px;
+    cursor:pointer;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
 .firsttext li,
 .secondtext li {
     padding: 0;
@@ -153,7 +245,6 @@ heading img {
     position: relative;
     left: 10px;
 }
-
 .firsttext p,
 .secondtext p {
     width: fit-content;
@@ -290,9 +381,9 @@ heading img {
     width: 145%;
 }
         `}
-      </style>
-    </main>
-  )
+            </style>
+        </main>
+    );
 }
 
 export default Posts;

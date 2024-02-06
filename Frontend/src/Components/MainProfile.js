@@ -104,6 +104,9 @@ const MainProfile = () => {
                 }
                 .profile-img{
                     border-radius:50%;
+                    width:30%;
+                    margin: 0 100px;
+                    height:auto;
                 }
 
                 .profile{

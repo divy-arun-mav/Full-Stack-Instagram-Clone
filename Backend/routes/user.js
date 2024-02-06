@@ -9,8 +9,8 @@ const POST = mongoose.model("POST")
 // Route
 router.get("/allposts", requireLogin, (req, res) => {
     POST.find()
-        .populate("postedBy", "_id username Photo")
-        .populate("comments.postedBy", "_id username")
+        .populate("postedBy", "_id name Photo")
+        .populate("comments.postedBy", "_id name")
         .sort("-createdAt")
         .then(posts => res.json(posts))
         .catch(err => console.log(err))
@@ -43,49 +43,35 @@ router.get("/myposts", requireLogin, (req, res) => {
         })
 })
 
-router.put("/like", requireLogin, async (req, res) => {
-    try {
-        const result = await POST.findByIdAndUpdate(
-            req.body.postId,
-            {
-                $push: { likes: req.user._id },
-            },
-            {
-                new: true,
+router.put("/like", requireLogin, (req, res) => {
+    POST.findByIdAndUpdate(req.body.postId, {
+        $push: { likes: req.user._id }
+    }, {
+        new: true
+    }).populate("postedBy", "_id name Photo")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            } else {
+                res.json(result)
             }
-        )
-            .populate("postedBy", "_id name Photo")
-            .exec();
+        })
+})
 
-        res.json(result);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error });
-    }
-});
-
-
-router.put("/unlike", requireLogin, async (req, res) => {
-    try {
-        const result = await POST.findByIdAndUpdate(
-            req.body.postId,
-            {
-                $pull: { likes: req.user._id },
-            },
-            {
-                new: true,
+router.put("/unlike", requireLogin, (req, res) => {
+    POST.findByIdAndUpdate(req.body.postId, {
+        $pull: { likes: req.user._id }
+    }, {
+        new: true
+    }).populate("postedBy", "_id name Photo")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            } else {
+                res.json(result)
             }
-        )
-            .populate("postedBy", "_id name Photo")
-            .exec();
-
-        res.json(result);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error });
-    }
-});
-
+        })
+})
 
 router.put("/comment", requireLogin, (req, res) => {
     const comment = {
