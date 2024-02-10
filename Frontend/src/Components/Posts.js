@@ -35,7 +35,7 @@ const Posts = ({ text, maxLength }) => {
             .then((res) => res.json())
             .then((result) => {
                 console.log(result);
-                setResult(result);
+                setResult(Array.isArray(result) ? result : []); // Check if result is an array
                 setLoading(false); // Set loading to false when data is fetched
             })
             .catch((err) => {
@@ -125,6 +125,8 @@ const Posts = ({ text, maxLength }) => {
             })
             .catch((err) => console.log(err));
     };
+
+
 
     let account_name = 'reelmaster_aarav_bhanushali';
     let time_upload = '2h';
