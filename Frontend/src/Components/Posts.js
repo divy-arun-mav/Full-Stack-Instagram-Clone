@@ -33,8 +33,7 @@ const Posts = ({ text, maxLength }) => {
             },
         })
             .then((res) => res.json())
-            .then((result) => {
-                console.log(result);
+            .then((result) => { 
                 setResult(Array.isArray(result) ? result : []); // Check if result is an array
                 setLoading(false); // Set loading to false when data is fetched
             })

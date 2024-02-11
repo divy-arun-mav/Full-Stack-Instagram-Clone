@@ -41,12 +41,12 @@ router.post("/signup", (req, res) => {
 })
 
 router.post("/signin", (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    if (!email || !password) {
+    if (!username || !password) {
         return res.status(422).json({ error: "Please add email and password" })
     }
-    USER.findOne({ email: email }).then((savedUser) => {
+    USER.findOne({ username: username }).then((savedUser) => {
         if (!savedUser) {
             return res.status(422).json({ error: "Invalid email" })
         }
@@ -65,6 +65,20 @@ router.post("/signin", (req, res) => {
         })
             .catch(err => console.log(err))
     })
+})
+
+router.get("/user", requireLogin, async (req, res) => {
+    try {
+        const username = req.user;
+        const user = await USER.findById(username);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(200).json({ user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 })
 
 module.exports = router;

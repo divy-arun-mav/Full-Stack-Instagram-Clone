@@ -4,18 +4,18 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
-    const [token, setToken] = useState(localStorage.getItem("token"));
+    const [token, setToken] = useState(localStorage.getItem("jwt"));
     const [user, setUser] = useState("");
     let isLoggedIn = !!token;
 
     const storeTokenInLS = (serverToken) => {
         setToken(serverToken);
-        return localStorage.setItem("token", serverToken);
+        return localStorage.setItem("jwt", serverToken);
     };
 
     const LogoutUser = () => {
         setToken("");
-        return localStorage.removeItem("token")
+        return localStorage.removeItem("jwt")
     }
 
     const userAuthentication = async () => {
@@ -32,8 +32,6 @@ export const AuthProvider = ({ children }) => {
 
                 if (data.msg) {
                     setUser(data.msg);
-
-
                 } else {
                     console.error("Unexpected API response format:", data);
                 }

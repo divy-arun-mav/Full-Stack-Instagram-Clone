@@ -22,7 +22,6 @@ const MainProfile = () => {
                 }
             });
             const data = await response.json();
-            JSON.stringify(result);
 
             if (data.error) {
                 notifyA(data.error);
@@ -37,6 +36,7 @@ const MainProfile = () => {
             setLoading(false);
         }
     }
+
 
     const getMyPosts = async () => {
         try {
@@ -65,6 +65,7 @@ const MainProfile = () => {
         getMyPosts();
     }, []);
 
+
     return (
         <>
             <Navbar />
@@ -72,22 +73,22 @@ const MainProfile = () => {
                 {loading ? (
                     <div>Loading...</div>
                 ) : (
-                    <div className='prof-cont'>
-                        <div className='insider'>
-                            <img className='profile-img' src={Profilephoto} />
-                            <div className='details'>
-                                <h2>Name: {result.msg.name}</h2><br />
-                                <h2>Username: {result.msg.username}</h2><br />
-                                <h2>email: {result.msg.email}</h2><br />
+                        <div className='prof-cont'>
+                            <div className='insider'>
+                                <img className='profile-img' src={Profilephoto} />
+                                <div className='details'>
+                                    <h2>Name: {result.user.name}</h2><br />
+                                    <h2>Username: {result.user.username}</h2><br />
+                                    <h2>Email: {result.user.email}</h2><br />
+                                </div>
+                            </div>
+                            <h1>Your Posts</h1>
+                            <div className='photo-container'>
+                                {postres.map((post) => (
+                                    <img className='photo' key={post._id} src={post.photo} />
+                                ))}
                             </div>
                         </div>
-                        <h1>Your Posts</h1>
-                        <div className='photo-container'>
-                            {postres.map((post) => (
-                                <img className='photo' key={post._id} src={post.photo} />
-                            ))}
-                        </div>
-                    </div>
                 )}
             </div>
             <style>
@@ -150,7 +151,8 @@ const MainProfile = () => {
                 `}
             </style>
         </>
-    )
+    );
+
 }
 
 export default MainProfile;
