@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
+const loader = () =>{
+    return(<h1>Posting....</h1>)
+}
+
 export default function Createpost() {
     const [body, setBody] = useState("");
     const [image, setImage] = useState("");
@@ -44,6 +48,7 @@ export default function Createpost() {
     // posting image to cloudinary
     const postDetails = () => {
         setLoading(true);
+        <loader/>
         const data = new FormData();
         data.append("file", image);
         data.append("upload_preset", "insta-clone");
