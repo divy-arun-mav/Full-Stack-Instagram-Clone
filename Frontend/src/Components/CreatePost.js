@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
-const loader = () =>{
-    return(<h1>Posting....</h1>)
-}
+const Loader = () => <h1>Posting....</h1>;
 
 export default function Createpost() {
     const [body, setBody] = useState("");
@@ -20,7 +18,7 @@ export default function Createpost() {
 
     useEffect(() => {
         // saving post to mongodb
-        if (url) {
+        if (url && posted) {
             fetch("http://localhost:5000/createpost", {
                 method: "post",
                 headers: {
@@ -31,24 +29,23 @@ export default function Createpost() {
                     body,
                     pic: url
                 })
-            }).then(res => res.json())
+            })
+                .then(res => res.json())
                 .then(data => {
                     if (data.error) {
                         notifyA(data.error);
                     } else {
-                        setPosted(true);
                         notifyB("Successfully Posted");
                         navigate("/");
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.log(err));
         }
-    }, [url, navigate]);
+    }, [url, posted, navigate]);
 
     // posting image to cloudinary
     const postDetails = () => {
         setLoading(true);
-        <loader/>
         const data = new FormData();
         data.append("file", image);
         data.append("upload_preset", "insta-clone");
@@ -57,10 +54,12 @@ export default function Createpost() {
         fetch("https://api.cloudinary.com/v1_1/djy7my1mw/image/upload", {
             method: "post",
             body: data
-        }).then(res => res.json())
+        })
+            .then(res => res.json())
             .then(data => {
                 setUrl(data.url);
                 setLoading(false);
+                setPosted(true); // Set posted to true after image upload
             })
             .catch(err => {
                 setLoading(false);
@@ -74,6 +73,7 @@ export default function Createpost() {
         output.onload = function () {
             URL.revokeObjectURL(output.src); // free memory
         };
+        setImage(event.target.files[0]);
     };
 
     return (
@@ -83,9 +83,7 @@ export default function Createpost() {
                     <h4 style={{ margin: "3px auto" }}>Create New Post</h4>
                     <button
                         id="post-btn"
-                        onClick={() => {
-                            postDetails();
-                        }}
+                        onClick={() => postDetails()}
                     >
                         Share
                     </button>
@@ -99,79 +97,80 @@ export default function Createpost() {
                     <input
                         type="file"
                         accept="image/*"
-                        onChange={(event) => {
-                            loadfile(event);
-                            setImage(event.target.files[0]);
-                        }}
+                        onChange={(event) => loadfile(event)}
                     />
-                    {loading && <div className="loader"></div>}
+                    {
+                        <div className="loader">
+                        loading && <Loader />
+                    </div>
+                    }
                 </div>
-                {/* details */}
                 <div className="details">
                     <div className="card-header">
-                        <div className="card-pic">
-                            <img
-                                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                alt=""
-                            />
-                        </div>
                         <h5>{localStorage.getItem("name")}</h5>
                     </div>
                     <textarea
                         value={body}
-                        onChange={(e) => {
-                            setBody(e.target.value);
-                        }}
+                        onChange={(e) => setBody(e.target.value)}
                         type="text"
                         placeholder="Write a caption...."
                     ></textarea>
                 </div>
                 <style>
                     {`
-                .card-pic img{
-                    width: 50px;
-                    height: 50px;
-                    border-radius:50%;
-                }
-                .createPost{
-    max-width: 500px;
-    margin: 10px auto;
-    border: 1px solid rgb(173, 173, 173);
-    border-radius: 5px;
-}
-
-.main-div{
-    border-top: 1px solid rgb(173, 173, 173) ;
-}
-.post-header{
-    display: flex;
-}
-
-#post-btn{
-    border: none;
-    color: #339ce3;
-    background:none;
-    font-weight: bolder;
-    cursor: pointer;
-}
-
-.details{
-    border-top: 1px solid rgb(173, 173, 173) ;
-}
-
-textarea{
-    width: 90%;
-    border: none;
-    outline: none;
-}
-
-#output{
-    width: 300px;
-    border: none;
-    outline: none;
-    margin-top: 5px;
-}
-                `}
+                        .card-pic img{
+                            width: 50px;
+                            height: 50px;
+                            border-radius:50%;
+                        }
+                        .createPost {
+                            max-width: 500px;
+                            margin: 10px auto;
+                            border: 1px solid rgb(173, 173, 173);
+                            border-radius: 5px;
+                        }
+                        .main-div {
+                            border-top: 1px solid rgb(173, 173, 173);
+                        }
+                        .post-header {
+                            display: flex;
+                        }
+                        #post-btn {
+                            border: none;
+                            color: #339ce3;
+                            background:none;
+                            font-weight: bolder;
+                            cursor: pointer;
+                        }
+                        .details {
+                            border-top: 1px solid rgb(173, 173, 173);
+                        }
+                        textarea {
+                            width: 90%;
+                            border: none;
+                            outline: none;
+                        }
+                        #output {
+                            width: 300px;
+                            border: none;
+                            outline: none;
+                            margin-top: 5px;
+                        }
+                        .loader{
+                            display:none;
+                            justify-content:center;
+                            align-items:center;
+                            position:absolute;
+                            top:8%;
+                            left:33%;
+                            border:0px solid black;
+                            border-radius:10px;
+                            height:500px;
+                            width:600px;
+                            background-color:white;
+                            box-shadow:1px 1px 10px black;
+                        }
+                    `}
                 </style>
             </div>
         </>
