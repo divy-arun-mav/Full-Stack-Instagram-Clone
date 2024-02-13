@@ -99,11 +99,11 @@ export default function Createpost() {
                         accept="image/*"
                         onChange={(event) => loadfile(event)}
                     />
-                    {
+                    {loading && (
                         <div className="loader">
-                        loading && <Loader />
-                    </div>
-                    }
+                            <Loader />
+                        </div>
+                    )}
                 </div>
                 <div className="details">
                     <div className="card-header">
@@ -157,7 +157,7 @@ export default function Createpost() {
                             margin-top: 5px;
                         }
                         .loader{
-                            display:none;
+                            display:${loading ? "flex" : "none"};
                             justify-content:center;
                             align-items:center;
                             position:absolute;
