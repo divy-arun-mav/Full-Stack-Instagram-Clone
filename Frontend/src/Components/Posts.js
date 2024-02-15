@@ -7,6 +7,8 @@ import Save from "../Images/saveicon.png";
 import Emoji from "../Images/emoji-icon.jpg";
 import Bluetick from "../Images/bluetick.png";
 import Sideburger from "../Images/Sideburger.png";
+import Heart from "../Images/heart.png";
+import Unlike from "../Images/unlike.png";
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -41,7 +43,7 @@ const Posts = ({ text, maxLength }) => {
                 console.log(err);
                 setLoading(false); // Set loading to false in case of an error
             });
-    }, [navigate]);
+    }, [navigate, result]);
 
     // Function to make a comment
     const makeComment = (text, id) => {
@@ -114,7 +116,7 @@ const Posts = ({ text, maxLength }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpanded = () => {
-        setIsExpanded(!isExpanded);
+        setIsExpanded((prevExpanded) => !prevExpanded);
     };
 
     return (
@@ -150,10 +152,22 @@ const Posts = ({ text, maxLength }) => {
                                     <img src={post.photo} />
                                 </div>
                                 <ul className="extraicons">
+
                                     <li className='extra iconone'>
-                                        <span class="material-symbols-outlined" style={{ fontSize: "30px" }} onClick={() => { likePost(post._id) }}>favorite</span>
-                                        <span class="material-symbols-outlined" style={{ fontSize: "30px" }} onClick={() => { unlikePost(post._id) }}>favorite</span>
+                                        {
+                                            post.likes && post.likes.some(like => {
+                                                const likedByArray = Array.isArray(like.likedBy) ? like.likedBy : [like.likedBy];
+                                                const likedit = likedByArray && likedByArray.length > 0 && likedByArray.some(user => user && user._id === JSON.parse(localStorage.getItem("user"))._id);
+                                                return likedit;
+                                            })
+                                                ? (
+                                                    <span onClick={() => { unlikePost(post._id) }}><img src={Unlike} className="unlike" style={{ fontSize: "30px" }} /></span>
+                                                ) : (
+                                                    <span onClick={() => { likePost(post._id) }}><img src={Heart} className="like" style={{ fontSize: "30px" }} /></span>
+                                                )
+                                        }
                                     </li>
+
                                     <li className='extra icontwo'><img src={Comment} /></li>
                                     <li className='extra iconthree'><img src={Share} /></li>
                                     <li className='extra iconfour'><img src={Save} /></li>
@@ -190,7 +204,6 @@ const Posts = ({ text, maxLength }) => {
     text-align: center;
     padding: none;
 }
-
 heading {
     display: flex;
     align-items: center;
