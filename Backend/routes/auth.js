@@ -12,20 +12,20 @@ router.get('/', (req, res) => {
 })
 
 router.post("/signup", (req, res) => {
-    const { name, userName, email, password } = req.body;
-    if (!name || !email || !userName || !password) {
+    const { name, username, email, password } = req.body;
+    if (!name || !email || !username || !password) {
         return res.status(422).json({ error: "Please add all the fields" })
     }
-    USER.findOne({ $or: [{ email: email }, { userName: userName }] }).then((savedUser) => {
+    USER.findOne({ $or: [{ email: email }, { username: username }] }).then((savedUser) => {
         if (savedUser) {
-            return res.status(422).json({ error: "User already exist with that email or userName" })
+            return res.status(422).json({ error: "User already exist with that email or username" })
         }
         bcrypt.hash(password, 12).then((hashedPassword) => {
 
             const user = new USER({
                 name,
                 email,
-                userName,
+                username,
                 password: hashedPassword
             })
 
@@ -44,7 +44,7 @@ router.post("/signin", (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(422).json({ error: "Please add email and password" })
+        return res.status(422).json({ error: "Please add username and password" })
     }
     USER.findOne({ username: username }).then((savedUser) => {
         if (!savedUser) {
@@ -54,11 +54,11 @@ router.post("/signin", (req, res) => {
             if (match) {
                 // return res.status(200).json({ message: "Signed in Successfully" })
                 const token = jwt.sign({ _id: savedUser.id }, Jwt_secret)
-                const { _id, name, email, userName } = savedUser
+                const { _id, name, email, username } = savedUser
 
-                res.json({ token, user: { _id, name, email, userName } })
+                res.json({ token, user: { _id, name, email, username } })
 
-                console.log({ token, user: { _id, name, email, userName } })
+                console.log({ token, user: { _id, name, email, username } })
             } else {
                 return res.status(422).json({ error: "Invalid password" })
             }

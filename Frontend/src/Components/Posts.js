@@ -43,32 +43,6 @@ const Posts = ({ text, maxLength }) => {
             });
     }, [navigate]);
 
-    const unlikePost = (id) => {
-        fetch("http://localhost:5000/unlike", {
-            method: "put",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-            body: JSON.stringify({
-                postId: id,
-            }),
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const newData = result.map((posts) => {
-                    if (posts._id === result._id) {
-                        return result;
-                    } else {
-                        return posts;
-                    }
-                });
-                setResult(newData);
-                console.log(result);
-            })
-            .catch((err) => console.log(err));
-    };
-
     // Function to make a comment
     const makeComment = (text, id) => {
         fetch("http://localhost:5000/comment", {
@@ -112,22 +86,29 @@ const Posts = ({ text, maxLength }) => {
         })
             .then((res) => res.json())
             .then((result) => {
-                const newData = result.map((posts) => {
-                    if (posts._id === result._id) {
-                        return result;
-                    } else {
-                        return posts;
-                    }
-                });
-                setResult(newData);
                 console.log(result);
             })
             .catch((err) => console.log(err));
     };
 
+    const unlikePost = (id) => {
+        fetch("http://localhost:5000/unlike", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId: id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((err) => console.log(err));
+    };
 
-
-    let account_name = 'reelmaster_aarav_bhanushali';
     let time_upload = '2h';
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -150,11 +131,9 @@ const Posts = ({ text, maxLength }) => {
                                     <div className='text'>
                                         <div className='firsttext'>
                                             <Link className='acc_name' to="" style={{ fontWeight: 640, fontSize: 13 + 'px' }}>
-                                                {post.postedBy.username}
+                                                {post.postedBy && post.postedBy.username}
                                                 <span className='profile'><Profile /></span>
                                             </Link>
-
-
                                             <img id='verified' className='bluetick' src={Bluetick} />
                                             <li>{time_upload}</li>
                                         </div>
@@ -171,12 +150,25 @@ const Posts = ({ text, maxLength }) => {
                                     <img src={post.photo} />
                                 </div>
                                 <ul className="extraicons">
-                                    <li className='extra iconone'><span class="material-symbols-outlined" style={{ fontSize: "30px" }} onClick={() => { likePost(post._id) }}>favorite</span></li>
+                                    <li className='extra iconone'>
+                                        <span class="material-symbols-outlined" style={{ fontSize: "30px" }} onClick={() => { likePost(post._id) }}>favorite</span>
+                                        <span class="material-symbols-outlined" style={{ fontSize: "30px" }} onClick={() => { unlikePost(post._id) }}>favorite</span>
+                                    </li>
                                     <li className='extra icontwo'><img src={Comment} /></li>
                                     <li className='extra iconthree'><img src={Share} /></li>
                                     <li className='extra iconfour'><img src={Save} /></li>
                                 </ul>
-                                <p className='likedby'>Liked by <b style={{ fontWeight: 640 }}>harshitamav</b> and <b style={{ fontWeight: 640 }}>12 others</b></p>
+
+                                <p className='likedby'><b style={{ fontWeight: 640 }}>
+                                    {post.likes && post.likes.length > 0 ? (
+                                        <span>Liked by {post.likes.map((like, index) => (
+                                            <span key={index}>{like.likedBy && like.likedBy.username}{index !== post.likes.length - 1 ? ', ' : ''}</span>
+                                        ))} and {post.likes.length - 1 !== 0 ? 'others' : 'other'}</span>
+                                    ) : (
+                                        <span>no likes</span>
+                                    )}
+                                </b></p>
+
                                 <p className='description'>{post.body}</p>
                                 <p id='show' onClick={toggleExpanded}>
                                     {isExpanded ? "and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." : 'more'}

@@ -15,14 +15,14 @@ const SignUp = () => {
 
     const postData = async () => {
 
-        // if (!emailRegex.test(email)) {
-        //     notifyA("Invalid Email");
-        //     return ;
-        // } 
-        // else if (!passRege.test(password)) {
-        //     notifyA("Password must contain atleast 8 characters, including atleast 1 number and 1 includes both lower and uppercase letters and special characters for example #,?!");
-        //     return;
-        // }
+        if (!emailRegex.test(email)) {
+            notifyA("Invalid Email");
+            return;
+        }
+        else if (!passRege.test(password)) {
+            notifyA("Password must contain atleast 8 characters, including atleast 1 number and 1 includes both lower and uppercase letters and special characters for example #,?!");
+            return;
+        }
 
         try {
             fetch("http://localhost:5000/signup", {

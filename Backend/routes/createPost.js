@@ -10,6 +10,7 @@ const POST = mongoose.model("POST")
 router.get("/allposts", requireLogin, (req, res) => {
     POST.find()
         .populate("postedBy", "_id username Photo")
+        .populate("likes.likedBy", "_id username")
         .populate("comments.postedBy", "_id username")
         .sort("-createdAt")
         .then(posts => res.json(posts))
@@ -44,17 +45,21 @@ router.get("/myposts", requireLogin, (req, res) => {
 })
 
 router.put("/like", requireLogin, async (req, res) => {
+    const like = {
+        likedBy: req.user._id
+    }
     try {
         const result = await POST.findByIdAndUpdate(
             req.body.postId,
             {
-                $push: { likes: req.user._id },
+                $push: { likes: like },
             },
             {
                 new: true,
             }
         )
-            .populate("postedBy", "_id name Photo")
+            .populate("likes.likedBy", "_id username")
+            .populate("postedBy", "_id username Photo")
             .exec();
 
         res.json(result);
@@ -66,11 +71,14 @@ router.put("/like", requireLogin, async (req, res) => {
 
 
 router.put("/unlike", requireLogin, async (req, res) => {
+    const like = {
+        likedBy: req.user._id
+    }
     try {
         const result = await POST.findByIdAndUpdate(
             req.body.postId,
             {
-                $pull: { likes: req.user._id },
+                $pull: { likes: like },
             },
             {
                 new: true,

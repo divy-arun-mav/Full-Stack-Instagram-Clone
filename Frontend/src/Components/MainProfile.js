@@ -78,7 +78,7 @@ const MainProfile = () => {
                                 <img className='profile-img' src={Profilephoto} />
                                 <div className='details'>
                                     <h2>Name: {result.user.name}</h2><br />
-                                    <h2>Username: {result.user.username}</h2><br />
+                                    <h2>Username: {result.user.userName}</h2><br />
                                     <h2>Email: {result.user.email}</h2><br />
                                 </div>
                             </div>
