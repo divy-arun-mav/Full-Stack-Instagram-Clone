@@ -28,7 +28,7 @@ const Posts = ({ text, maxLength }) => {
             navigate("./signup");
         }
 
-        // Fetching all posts
+
         fetch("http://localhost:5000/allposts", {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -36,16 +36,15 @@ const Posts = ({ text, maxLength }) => {
         })
             .then((res) => res.json())
             .then((result) => { 
-                setResult(Array.isArray(result) ? result : []); // Check if result is an array
-                setLoading(false); // Set loading to false when data is fetched
+                setResult(Array.isArray(result) ? result : []);
+                setLoading(false); 
             })
             .catch((err) => {
                 console.log(err);
-                setLoading(false); // Set loading to false in case of an error
+                setLoading(false); 
             });
     }, [navigate, result]);
 
-    // Function to make a comment
     const makeComment = (text, id) => {
         fetch("http://localhost:5000/comment", {
             method: "put",
@@ -68,7 +67,7 @@ const Posts = ({ text, maxLength }) => {
                     }
                 });
                 setResult(newData);
-                setComment(""); // Clear comment state
+                setComment(""); 
                 notifyB("Comment posted");
                 console.log(result);
             })

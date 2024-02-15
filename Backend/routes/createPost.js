@@ -5,8 +5,6 @@ const requireLogin = require("../middlewares/requireLogin");
 const { route } = require("./auth");
 const POST = mongoose.model("POST")
 
-
-// Route
 router.get("/allposts", requireLogin, (req, res) => {
     POST.find()
         .populate("postedBy", "_id username Photo")
@@ -116,7 +114,6 @@ router.put("/comment", requireLogin, (req, res) => {
         })
 })
 
-// Api to delete post
 router.delete("/deletePost/:postId", requireLogin, (req, res) => {
     POST.findOne({ _id: req.params.postId })
         .populate("postedBy", "_id")
