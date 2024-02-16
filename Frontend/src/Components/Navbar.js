@@ -16,8 +16,8 @@ const Navbar = () => {
       <>
       <div className='SideNav'>
       <nav>
-      <div className='logo'>
-      <img src={Logo} alt="logo" />
+            <div className='logo'>
+              <img style={{ width: "50px" }} src='https://cdn4.iconfinder.com/data/icons/social-media-black-white-2/600/Instagram_glyph_svg-512.png' alt="logo" />
       </div>
       <ul className='nav-list'>
               <Link className='link' to="/"><li className='Home'><img src={Homeicon} /><span>Home</span></li></Link>
@@ -60,6 +60,7 @@ const Navbar = () => {
 a{
   text-decoration:none;
   color:black;
+  padding:0;
 }
 .more:hover ~.logout{
   display:block;
@@ -81,7 +82,8 @@ nav{
     left: 0;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 20px;
-    width: 15%;
+    width: min-content;
+    padding-right:20px;
     height: 100vh;
     text-align: left;
     border-right: 1px solid rgb(213, 213, 213);
@@ -174,7 +176,7 @@ nav{
 ul li:hover {
     background-color: rgba(61, 61, 61, 0);
 }
-@media screen and (max-width:1100px){
+@media screen and (max-width:1300px){
   .nav-list a li span ,.more span{
     display:none;
   }

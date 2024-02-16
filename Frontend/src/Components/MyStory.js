@@ -18,7 +18,7 @@ const MyStory = () => {
       <style>
         {`
         body{
-    margin: 30px 0px 0px 380px;
+    margin: 30px 0px 0px 20%;
     padding: 0px 10px;
 }
 

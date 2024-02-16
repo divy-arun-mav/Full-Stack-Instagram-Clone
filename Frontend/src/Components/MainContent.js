@@ -7,14 +7,6 @@ const MainContent = () => {
     <div>
       <Story />
       <Posts />
-      <style>
-        {`
-        body{
-    margin: 40px 0px 0px 380px;
-    padding: 0px 10px;
-}
-        `}
-      </style>
     </div>
   )
 }

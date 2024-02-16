@@ -7,11 +7,16 @@ import Signin from './SignIn'
 
 const Instagram = () => {
   return (
-    <div className='AppContent'>
-      {/* <Signin/> */}
-      <Navbar />
-      <MainContent />
-      <div className='RightBar'><RightBar /></div>
+    <>
+
+      <div className='AppContent'>
+        <Navbar />
+        <div className='main-content'>
+          <MainContent />
+        </div>
+        <div className='RightBar'>
+          <RightBar /></div>
+      </div>
       <style>
         {`
         .RightBar {
@@ -20,9 +25,16 @@ const Instagram = () => {
     right: 0;
     width: 28%;
 }
+.main-content{
+  margin:0;
+}
+@media screen and (max-width:1100px){
+  .RightBar{
+    display:none;
+}
         `}
       </style>
-    </div>
+    </>
   )
 }
 
