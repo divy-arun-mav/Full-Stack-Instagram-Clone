@@ -6,6 +6,7 @@ const MyStory = () => {
   let user_img = { Friends };
   return (
     <div className='Stories'>
+
       <div className='Story'>
         <li>
           <div className='Back-wrapper'>
